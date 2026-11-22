@@ -114,14 +114,16 @@ h2 { font-size: clamp(2rem, 4.5vw, 3.1rem); letter-spacing: -.07em; }
 .categories button { border-radius: 999px; padding: 9px 16px; border: 1px solid #aaa99d; background: transparent; color: var(--ink); cursor: pointer; }
 .categories button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: white; }
 .categories button:hover { border-color: var(--ink); }
+.guide-note { margin: 14px 0 0; color: var(--muted); font-size: .875rem; line-height: 1.6; }
 #result-count { color: var(--muted); margin: 22px 0 12px; }
 .region-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.region-grid.single-region { grid-template-columns: minmax(0, 1fr); }
+.single-region .entries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; }
 .region-card { background: #fffdf7; padding: 24px; border: 1px solid var(--line); border-top: 3px solid var(--accent, var(--red)); }
 .region-card h3 { font-size: 1.6rem; letter-spacing: -.055em; }
 .region-card header p { color: var(--muted); margin: 6px 0 0; }
 .entries { padding: 0; margin: 22px 0 0; list-style: none; }
 .entries li { padding: 14px 0; border-top: 1px solid var(--line); }
-.entries li:last-child { padding-bottom: 0; }
 .entry-label { color: var(--red); margin: 0 0 4px; font-size: .875rem; font-weight: 700; }
 .entries h4 { font-size: 1.08rem; }
 .entry-photo summary {
@@ -144,6 +146,13 @@ h2 { font-size: clamp(2rem, 4.5vw, 3.1rem); letter-spacing: -.07em; }
 .entry-photo figcaption { margin-top: 6px; color: var(--muted); font-size: .875rem; line-height: 1.5; overflow-wrap: anywhere; }
 .entry-photo figcaption a { text-underline-offset: 3px; }
 .entry-description { color: var(--muted); line-height: 1.65; margin: 5px 0 0; }
+.entry-location, .entry-period { margin: 6px 0 0; color: var(--muted); font-size: .875rem; line-height: 1.65; }
+.entry-location strong, .entry-period strong { color: var(--ink); }
+.entry-links { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 8px; font-size: .875rem; }
+.entry-links a { color: #275d78; text-underline-offset: 3px; }
+.more-entries { margin-top: 9px; }
+.more-entries summary { padding: 10px 0; color: #275d78; cursor: pointer; font-weight: 700; }
+.more-entries .entries { margin-top: 4px; }
 footer { border-top: 1px solid var(--line); }
 footer a { text-underline-offset: 4px; }
 
@@ -159,5 +168,5 @@ footer a { text-underline-offset: 4px; }
   .hero-photo { min-height: 290px; }
   .hero-photo img { object-position: center 48%; }
   .explore { padding: 48px 0 56px; }
-  .region-picker, .region-grid { grid-template-columns: minmax(0, 1fr); }
+  .region-picker, .region-grid, .single-region .entries { grid-template-columns: minmax(0, 1fr); }
 }

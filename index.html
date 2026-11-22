@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="북쪽 홋카이도부터 남쪽 오키나와까지, 일본 10개 지역의 명소와 즐길 거리, 지역 음식을 찾아보세요.">
+  <meta name="description" content="일본 10개 권역의 관광명소, 먹거리, 액티비티, 축제를 위치와 개최 시기로 찾아보세요.">
   <title>일본 한 바퀴 | 지역별 일본 여행 가이드</title>
   <link rel="stylesheet" href="styles/style.css">
   <script defer src="scripts/photos.js"></script>
   <script defer src="scripts/japan-map.js"></script>
+  <script defer src="scripts/travel-guide.js"></script>
   <script defer src="scripts/main.js"></script>
 </head>
 <body>
@@ -20,7 +21,7 @@
       <div class="hero-copy">
         <p class="eyebrow" lang="en">JAPAN TRAVEL GUIDE</p>
         <h1 id="hero-title">일본, 어디부터<br>가볼까요?</h1>
-        <p>북쪽 홋카이도의 설원부터 남쪽 오키나와의 바다까지. 명소, 놀거리, 먹거리로 다음 여행지를 찾아보세요.</p>
+        <p>북쪽 홋카이도의 설원부터 남쪽 오키나와의 바다까지. 명소, 먹거리, 액티비티, 축제로 다음 여행지를 찾아보세요.</p>
         <a class="cta" href="#regions">지역 둘러보기</a>
       </div>
       <figure class="hero-photo">
@@ -47,14 +48,16 @@
         </div>
       </div>
       <div class="filters">
-        <label>검색 <input id="search" type="search" placeholder="예: 온천, 도쿄, 우동"></label>
+        <label>검색 <input id="search" type="search" placeholder="예: 온천, 도쿄, 8월"></label>
       </div>
       <div class="categories" id="categories" role="group" aria-label="여행 테마">
         <button type="button" data-category="" aria-pressed="true">전체 테마</button>
         <button type="button" data-category="sight" aria-pressed="false">관광명소</button>
-        <button type="button" data-category="activity" aria-pressed="false">놀거리</button>
+        <button type="button" data-category="activity" aria-pressed="false">액티비티</button>
         <button type="button" data-category="food" aria-pressed="false">먹거리</button>
+        <button type="button" data-category="event" aria-pressed="false">축제·행사</button>
       </div>
+      <p class="guide-note">먹거리 위치는 맛볼 만한 식당이나 시장의 예시입니다. 행사 개최일과 세부 장소는 해당 연도 공식 안내를 확인하세요.</p>
       <p id="result-count" role="status"></p>
       <div class="region-grid" id="results"></div>
       <noscript><p>지역 탐색을 이용하려면 브라우저에서 JavaScript를 켜주세요.</p></noscript>

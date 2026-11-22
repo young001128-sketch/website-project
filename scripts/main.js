@@ -1,4 +1,5 @@
-const categories = { sight: "관광명소", activity: "놀거리", food: "먹거리" };
+const categories = { sight: "관광명소", activity: "액티비티", food: "먹거리", event: "축제·행사" };
+const previewCount = 4;
 const regions = [
   {
     id: "hokkaido", name: "홋카이도", cities: "삿포로 · 오타루 · 니세코", color: "#486d7a",
@@ -80,7 +81,20 @@ const regions = [
       food: ["오키나와 소바", "밀로 만든 면을 국물에 담고 조린 돼지고기를 올리는 섬의 대표 음식이에요."],
     },
   },
-];
+].map(region => {
+  const guide = travelGuide[region.id];
+  const originals = Object.entries(region.entries).map(([category, [title, description]]) => ({
+    category, title, description, location: guide.locations[category],
+    photoId: `${region.id}-${category}`,
+  }));
+  const [title, location, period, officialUrl, description] = annualEvents[region.id];
+  const event = { category: "event", title, location, period, officialUrl, description };
+  const additional = Object.entries(categories)
+    .flatMap(([category]) => (guide[category] ?? []).map(([title, location, description]) => ({
+      category, title, location, description,
+    })));
+  return { ...region, entries: [...originals, event, ...additional] };
+});
 
 const japanMap = document.querySelector("#japan-map");
 const mapRegions = document.querySelector("#map-regions");
@@ -128,13 +142,66 @@ function selectRegion(event) {
   render();
 }
 
+function renderEntry(entry) {
+  const { category, title, description, location, period, officialUrl, photoId } = entry;
+  const photo = entryPhotos[photoId];
+  const mapQuery = encodeURIComponent(`일본 ${location}`);
+  return `
+    <li>
+      <p class="entry-label">${categories[category]}</p>
+      ${photo ? `
+        <details class="entry-photo">
+          <summary>
+            <span class="entry-title">${title}</span>
+            <span class="photo-indicator">사진<span aria-hidden="true"></span></span>
+          </summary>
+          <figure>
+            <img src="image/places/${photoId}.jpg" alt="${photo.alt}" loading="lazy" decoding="async" width="${photo.width}" height="${photo.height}">
+            <figcaption>
+              <a href="${photo.source}">사진 원본</a> · ${photo.artist} ·
+              ${photo.licenseUrl ? `<a href="${photo.licenseUrl}">${photo.license}</a>` : photo.license} · 크기 조정
+            </figcaption>
+          </figure>
+        </details>
+      ` : `<h4>${title}</h4>`}
+      ${description ? `<p class="entry-description">${description}</p>` : ""}
+      ${period ? `<p class="entry-period"><strong>개최 시기</strong> ${period}</p>` : ""}
+      <p class="entry-location"><strong>${category === "food" ? "맛볼 곳" : "위치"}</strong> ${location}</p>
+      <div class="entry-links">
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=${mapQuery}" aria-label="${title} 지도에서 보기">지도에서 보기</a>
+        ${officialUrl ? `<a href="${officialUrl}" aria-label="${title} 공식 안내">공식 안내</a>` : ""}
+      </div>
+    </li>
+  `;
+}
+
+function renderRegion(region, showAll) {
+  const visible = showAll ? region.entries : region.entries.slice(0, previewCount);
+  const remaining = region.entries.slice(visible.length);
+  return `
+    <article class="region-card" style="--accent: ${region.color}">
+      <header>
+        <h3>${region.name}</h3>
+        <p>${region.cities} · ${region.entries.length}개 추천</p>
+      </header>
+      <ul class="entries">${visible.map(renderEntry).join("")}</ul>
+      ${remaining.length ? `
+        <details class="more-entries">
+          <summary>${region.name} 추천 ${remaining.length}개 더 보기</summary>
+          <ul class="entries">${remaining.map(renderEntry).join("")}</ul>
+        </details>
+      ` : ""}
+    </article>
+  `;
+}
+
 function render() {
   const terms = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
   const matches = regions
     .filter(({ id }) => !selectedRegion || id === selectedRegion)
     .map(region => {
-      const entries = Object.entries(region.entries).filter(([category, [title, description]]) => {
-        const searchable = [region.name, region.cities, categories[category], title, description].join(" ").toLowerCase();
+      const entries = region.entries.filter(({ category, title, description, location, period }) => {
+        const searchable = [region.name, region.cities, categories[category], title, description, location, period].join(" ").toLowerCase();
         return (!selectedCategory || category === selectedCategory) &&
           terms.every(term => searchable.includes(term));
       });
@@ -150,40 +217,8 @@ function render() {
     : "검색 결과가 없습니다. 다른 검색어나 필터를 사용해 보세요.";
 
   // Only fixed guide data is rendered here. Search text is used solely for filtering.
-  results.innerHTML = matches.map(region => `
-    <article class="region-card" style="--accent: ${region.color}">
-      <header>
-        <h3>${region.name}</h3>
-        <p>${region.cities}</p>
-      </header>
-      <ul class="entries">
-        ${region.entries.map(([category, [title, description]]) => {
-          const photo = entryPhotos[`${region.id}-${category}`];
-          return `
-            <li>
-              <p class="entry-label">${categories[category]}</p>
-              ${photo ? `
-                <details class="entry-photo">
-                  <summary>
-                    <span class="entry-title">${title}</span>
-                    <span class="photo-indicator">사진<span aria-hidden="true"></span></span>
-                  </summary>
-                  <figure>
-                    <img src="image/places/${region.id}-${category}.jpg" alt="${photo.alt}" loading="lazy" decoding="async" width="${photo.width}" height="${photo.height}">
-                    <figcaption>
-                      <a href="${photo.source}">사진 원본</a> · ${photo.artist} ·
-                      ${photo.licenseUrl ? `<a href="${photo.licenseUrl}">${photo.license}</a>` : photo.license} · 크기 조정
-                    </figcaption>
-                  </figure>
-                </details>
-              ` : `<h4>${title}</h4>`}
-              <p class="entry-description">${description}</p>
-            </li>
-          `;
-        }).join("")}
-      </ul>
-    </article>
-  `).join("");
+  results.classList.toggle("single-region", Boolean(selectedRegion));
+  results.innerHTML = matches.map(region => renderRegion(region, selectedRegion || terms.length)).join("");
 }
 
 japanMap.addEventListener("click", selectRegion);
