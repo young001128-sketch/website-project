@@ -78,6 +78,25 @@ h2 { font-size: clamp(2rem, 4.5vw, 3.1rem); letter-spacing: -.07em; }
 .entries li:last-child { padding-bottom: 0; }
 .entry-label { color: var(--red); margin: 0 0 4px; font-size: .875rem; font-weight: 700; }
 .entries h4 { font-size: 1.08rem; }
+.entry-photo summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 34px;
+  cursor: pointer;
+  list-style: none;
+}
+.entry-photo summary::-webkit-details-marker { display: none; }
+.entry-photo summary:hover .entry-title { text-decoration: underline; text-underline-offset: 4px; }
+.entry-title { font-size: 1.08rem; font-weight: 700; }
+.photo-indicator { flex: none; color: var(--red); font-size: .875rem; font-weight: 700; }
+.photo-indicator span::after { content: "+"; margin-left: 5px; }
+.entry-photo[open] .photo-indicator span::after { content: "−"; }
+.entry-photo figure { margin: 9px 0; }
+.entry-photo img { display: block; width: 100%; height: auto; max-height: 340px; object-fit: contain; background: var(--paper); border-radius: 4px; }
+.entry-photo figcaption { margin-top: 6px; color: var(--muted); font-size: .875rem; line-height: 1.5; overflow-wrap: anywhere; }
+.entry-photo figcaption a { text-underline-offset: 3px; }
 .entry-description { color: var(--muted); line-height: 1.65; margin: 5px 0 0; }
 footer { border-top: 1px solid var(--line); }
 footer a { text-underline-offset: 4px; }

@@ -120,13 +120,30 @@ function render() {
         <p>${region.cities}</p>
       </header>
       <ul class="entries">
-        ${region.entries.map(([category, [title, description]]) => `
-          <li>
-            <p class="entry-label">${categories[category]}</p>
-            <h4>${title}</h4>
-            <p class="entry-description">${description}</p>
-          </li>
-        `).join("")}
+        ${region.entries.map(([category, [title, description]]) => {
+          const photo = entryPhotos[`${region.id}-${category}`];
+          return `
+            <li>
+              <p class="entry-label">${categories[category]}</p>
+              ${photo ? `
+                <details class="entry-photo">
+                  <summary>
+                    <span class="entry-title">${title}</span>
+                    <span class="photo-indicator">사진<span aria-hidden="true"></span></span>
+                  </summary>
+                  <figure>
+                    <img src="image/places/${region.id}-${category}.jpg" alt="${photo.alt}" loading="lazy" decoding="async" width="${photo.width}" height="${photo.height}">
+                    <figcaption>
+                      <a href="${photo.source}">사진 원본</a> · ${photo.artist} ·
+                      ${photo.licenseUrl ? `<a href="${photo.licenseUrl}">${photo.license}</a>` : photo.license} · 크기 조정
+                    </figcaption>
+                  </figure>
+                </details>
+              ` : `<h4>${title}</h4>`}
+              <p class="entry-description">${description}</p>
+            </li>
+          `;
+        }).join("")}
       </ul>
     </article>
   `).join("");
