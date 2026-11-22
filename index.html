@@ -7,6 +7,7 @@
   <title>일본 한 바퀴 | 지역별 일본 여행 가이드</title>
   <link rel="stylesheet" href="styles/style.css">
   <script defer src="scripts/photos.js"></script>
+  <script defer src="scripts/japan-map.js"></script>
   <script defer src="scripts/main.js"></script>
 </head>
 <body>
@@ -30,8 +31,22 @@
     <section class="explore" id="regions" aria-labelledby="regions-title">
       <p class="eyebrow" lang="en">EXPLORE BY REGION</p>
       <h2 id="regions-title">일본 지역 탐색</h2>
+      <div class="region-picker">
+        <figure class="map-panel">
+          <svg id="japan-map" viewBox="0 0 560 440" aria-hidden="true"></svg>
+          <figcaption>
+            <a href="https://www.geoboundaries.org/api/current/gbOpen/JPN/ADM1/">geoBoundaries</a> ·
+            <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap 기여자</a> · Wambacher ·
+            <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL 1.0</a>
+          </figcaption>
+        </figure>
+        <div class="map-controls">
+          <h3 id="map-title">어느 지역으로 갈까요?</h3>
+          <p>지도나 지역 이름을 눌러 여행지를 찾아보세요.</p>
+          <div id="map-regions" class="map-regions" role="group" aria-labelledby="map-title"></div>
+        </div>
+      </div>
       <div class="filters">
-        <label>지역 <select id="region"><option value="">모든 지역</option></select></label>
         <label>검색 <input id="search" type="search" placeholder="예: 온천, 도쿄, 우동"></label>
       </div>
       <div class="categories" id="categories" role="group" aria-label="여행 테마">

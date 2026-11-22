@@ -82,21 +82,56 @@ const regions = [
   },
 ];
 
-const regionSelect = document.querySelector("#region");
+const japanMap = document.querySelector("#japan-map");
+const mapRegions = document.querySelector("#map-regions");
 const search = document.querySelector("#search");
 const categoryGroup = document.querySelector("#categories");
 const resultCount = document.querySelector("#result-count");
 const results = document.querySelector("#results");
 let selectedCategory = "";
+let selectedRegion = "";
 
-for (const { id, name } of regions) {
-  regionSelect.add(new Option(name, id));
+japanMap.innerHTML = `
+  ${regions.map(({ id, name }) => `
+    <g class="map-shape" data-region="${id}">
+      <title>${name}</title>
+      ${id === "okinawa" ? `
+        <g class="okinawa-inset">
+          <rect x="26" y="33" width="179" height="112" rx="8"/>
+          <text x="38" y="62">오키나와</text>
+        </g>
+      ` : ""}
+      ${japanMapPaths[id].map(path => `<path d="${path}"/>`).join("")}
+    </g>
+  `).join("")}
+`;
+
+mapRegions.innerHTML = `
+  <button class="map-all" type="button" data-region="" aria-pressed="true">모든 지역</button>
+  ${regions.map(({ id, name }) => `
+    <button type="button" data-region="${id}" aria-pressed="false">
+      <span class="map-swatch" aria-hidden="true"></span>${name}
+    </button>
+  `).join("")}
+`;
+
+function selectRegion(event) {
+  const item = event.target.closest("[data-region]");
+  if (!item) return;
+  selectedRegion = item.dataset.region;
+  for (const shape of japanMap.querySelectorAll(".map-shape")) {
+    shape.classList.toggle("is-selected", shape.dataset.region === selectedRegion);
+  }
+  for (const button of mapRegions.querySelectorAll("button")) {
+    button.setAttribute("aria-pressed", String(button.dataset.region === selectedRegion));
+  }
+  render();
 }
 
 function render() {
   const terms = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
   const matches = regions
-    .filter(({ id }) => !regionSelect.value || id === regionSelect.value)
+    .filter(({ id }) => !selectedRegion || id === selectedRegion)
     .map(region => {
       const entries = Object.entries(region.entries).filter(([category, [title, description]]) => {
         const searchable = [region.name, region.cities, categories[category], title, description].join(" ").toLowerCase();
@@ -108,8 +143,10 @@ function render() {
     .filter(region => region.entries.length);
 
   const totalEntries = matches.reduce((total, region) => total + region.entries.length, 0);
+  const activeRegion = regions.find(({ id }) => id === selectedRegion);
+  const resultLabel = activeRegion ? activeRegion.name : `${matches.length}개 지역`;
   resultCount.textContent = matches.length
-    ? `${matches.length}개 지역 · ${totalEntries}개 추천`
+    ? `${resultLabel} · ${totalEntries}개 추천`
     : "검색 결과가 없습니다. 다른 검색어나 필터를 사용해 보세요.";
 
   // Only fixed guide data is rendered here. Search text is used solely for filtering.
@@ -149,7 +186,8 @@ function render() {
   `).join("");
 }
 
-regionSelect.addEventListener("change", render);
+japanMap.addEventListener("click", selectRegion);
+mapRegions.addEventListener("click", selectRegion);
 search.addEventListener("input", render);
 categoryGroup.addEventListener("click", event => {
   const button = event.target.closest("button[data-category]");

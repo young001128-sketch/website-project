@@ -60,10 +60,56 @@ h1 { font-size: clamp(2.65rem, 6.2vw, 5.3rem); line-height: 1.12; letter-spacing
 
 .explore { padding: 72px 0 88px; }
 h2 { font-size: clamp(2rem, 4.5vw, 3.1rem); letter-spacing: -.07em; }
-.filters { display: grid; grid-template-columns: minmax(180px, 230px) minmax(0, 340px); gap: 14px; margin: 26px 0 16px; }
+.region-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: center;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  background: #fffdf7;
+}
+.map-panel { margin: 0; padding: 12px 16px; background: #eaf2ef; }
+.map-panel svg { display: block; width: 100%; max-height: 450px; }
+.map-panel figcaption { color: var(--muted); font-size: .8125rem; line-height: 1.5; }
+.okinawa-inset rect { fill: #f4f8f6; stroke: #91aaa1; stroke-dasharray: 4 4; }
+.okinawa-inset text { fill: var(--muted); stroke: none; font-size: 16px; font-weight: 700; }
+.map-shape { fill: var(--map-color); stroke: #fffdf7; stroke-width: 1; stroke-linejoin: round; cursor: pointer; }
+.map-shape:hover, .map-shape.is-selected { fill: #2b3f37; stroke-width: 1.5; }
+#japan-map:has(.is-selected) .map-shape:not(.is-selected):not(:hover) { opacity: .7; }
+.region-picker [data-region="hokkaido"] { --map-color: #6795b2; }
+.region-picker [data-region="tohoku"] { --map-color: #779c81; }
+.region-picker [data-region="kanto"] { --map-color: #c97164; }
+.region-picker [data-region="hokuriku"] { --map-color: #69a6a1; }
+.region-picker [data-region="tokai"] { --map-color: #d3a857; }
+.region-picker [data-region="kansai"] { --map-color: #ab91bc; }
+.region-picker [data-region="chugoku"] { --map-color: #a2aa61; }
+.region-picker [data-region="shikoku"] { --map-color: #d49068; }
+.region-picker [data-region="kyushu"] { --map-color: #c28292; }
+.region-picker [data-region="okinawa"] { --map-color: #67a590; }
+.map-controls { padding: clamp(16px, 3vw, 40px); }
+.map-controls h3 { font-size: clamp(1.35rem, 2.5vw, 2rem); letter-spacing: -.05em; }
+.map-controls p { margin: 8px 0 18px; color: var(--muted); line-height: 1.6; }
+.map-regions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.map-regions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--ink);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.map-regions button:hover { border-color: var(--ink); }
+.map-regions button[aria-pressed="true"] { border-color: #2b3f37; color: white; background: #2b3f37; }
+.map-regions .map-all { grid-column: 1 / -1; justify-content: center; }
+.map-swatch { width: 12px; height: 12px; flex: none; border-radius: 50%; background: var(--map-color); }
+.filters { max-width: 410px; margin: 26px 0 16px; }
 .filters label { display: grid; gap: 7px; font-size: .875rem; font-weight: 700; }
-.filters input, .filters select { width: 100%; min-height: 46px; padding: 10px 12px; background-color: #fffdf7; border: 1px solid #aaa99d; border-radius: 4px; color: var(--ink); }
-.filters select { appearance: none; padding-right: 33px; background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: right 16px center, right 11px center; background-size: 5px 5px; background-repeat: no-repeat; }
+.filters input { width: 100%; min-height: 46px; padding: 10px 12px; background-color: #fffdf7; border: 1px solid #aaa99d; border-radius: 4px; color: var(--ink); }
 .categories { display: flex; flex-wrap: wrap; gap: 8px; }
 .categories button { border-radius: 999px; padding: 9px 16px; border: 1px solid #aaa99d; background: transparent; color: var(--ink); cursor: pointer; }
 .categories button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: white; }
@@ -113,5 +159,5 @@ footer a { text-underline-offset: 4px; }
   .hero-photo { min-height: 290px; }
   .hero-photo img { object-position: center 48%; }
   .explore { padding: 48px 0 56px; }
-  .filters, .region-grid { grid-template-columns: minmax(0, 1fr); }
+  .region-picker, .region-grid { grid-template-columns: minmax(0, 1fr); }
 }
