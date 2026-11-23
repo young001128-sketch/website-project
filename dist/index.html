@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="후지산의 새벽, 도쿄의 밤, 오키나와의 바다에서 시작하는 일본 여행 지도. 지역별 명소, 체험, 축제와 먹거리를 둘러보세요.">
+  <meta name="theme-color" content="#182523">
+  <title>일본의 결 · Japan Atlas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23182523'/%3E%3Cpath d='m7 23 7-8 5 6 4-4 6 6M8 26h20M22.5 10.5h.01' fill='none' stroke='%23f3a188' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="assets/regions.js" defer></script>
+  <script src="travel.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="hero" id="opening" aria-labelledby="hero-title" data-scene="mountain">
+      <div class="hero-images" aria-hidden="true">
+        <div class="scene is-active" data-image="mountain"></div>
+        <div class="scene" data-image="city"></div>
+        <div class="scene" data-image="coast"></div>
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <header class="header layout">
+        <a class="wordmark" href="#opening" aria-label="일본의 결 첫 화면">
+          <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17.3"/><path d="m7 23 7-8 5 6 4-4 6 6M8 26h20M22.5 10.5h.01"/></svg></span>
+          <span><strong>일본의 결</strong><small>JAPAN ATLAS</small></span>
+        </a>
+        <a class="header-link" href="#explore"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z"/><path d="M12 11v2m-1-1h2"/></svg>지도 탐색</a>
+      </header>
+
+      <div class="hero-content layout">
+        <div class="hero-copy" id="hero-copy" aria-live="polite">
+          <p class="eyebrow hero-kicker" id="hero-kicker">가와구치호 · 야마나시</p>
+          <h1 id="hero-title">일본의 풍경을<br>따라가다<span>.</span></h1>
+          <p class="hero-description" id="hero-description">후지산 아래 고요한 호수에서 시작해<br>마음이 이끄는 곳으로 떠나보세요.</p>
+        </div>
+        <a class="primary-link" href="#explore">지도 펼치기<svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15m6-12v15"/></svg></a>
+      </div>
+
+      <div class="hero-bottom layout">
+        <div class="scene-picker" role="group" aria-label="오프닝 풍경 선택">
+          <button class="scene-button" type="button" data-choice="mountain" aria-pressed="true"><span class="scene-thumb mountain-thumb" aria-hidden="true"></span><span>산과 호수</span></button>
+          <button class="scene-button" type="button" data-choice="city" aria-pressed="false"><span class="scene-thumb city-thumb" aria-hidden="true"></span><span>도시의 밤</span></button>
+          <button class="scene-button" type="button" data-choice="coast" aria-pressed="false"><span class="scene-thumb coast-thumb" aria-hidden="true"></span><span>남쪽의 바다</span></button>
+        </div>
+        <p class="scene-location" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M19 10c0 5-7 10-7 10S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.25"/></svg><span id="scene-location">LAKE KAWAGUCHI, JAPAN</span></p>
+      </div>
+    </section>
+
+    <section class="explorer" id="explore" aria-labelledby="explore-title">
+      <div class="layout">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow section-kicker">EXPLORE THE MAP</p>
+            <h2 id="explore-title" tabindex="-1">어디로 떠날까요?</h2>
+          </div>
+          <p>지도에서 지역을 고르면<br class="desktop-break"> 그곳에서 보고, 즐기고, 맛볼 거리가 펼쳐져요.</p>
+        </div>
+
+        <div class="explore-grid">
+          <div class="map-card">
+            <div class="map-caption"><span class="map-symbol" aria-hidden="true">◈</span> 일본 여행 지도</div>
+            <svg class="japan-map" id="japan-map" viewBox="0 0 720 550" role="group" aria-label="일본의 아홉 여행 권역">
+              <defs><pattern id="map-grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M 36 0 L 0 0 0 36" fill="none" stroke="#abc0b4" stroke-opacity=".38" stroke-width="1"/></pattern></defs>
+              <rect width="720" height="550" fill="url(#map-grid)" aria-hidden="true"/>
+              <g class="compass" aria-hidden="true" transform="translate(663 72)"><text y="-24">N</text><path d="M0-15 5 3 0 0-5 3Z"/><circle cy="2" r="20" fill="none"/><path d="M0 18V10M-13 2h5m16 0h5" fill="none"/></g>
+              <g id="map-terrain"></g>
+              <g id="map-labels"></g>
+            </svg>
+            <div class="region-picker" id="region-picker" role="group" aria-label="지역 목록"></div>
+          </div>
+
+          <section class="region-panel" aria-labelledby="region-title">
+            <div class="region-overview" id="region-overview">
+              <div class="region-picture" id="region-picture" aria-hidden="true"></div>
+              <div class="region-intro">
+                <p class="eyebrow" id="region-romaji">KANTO</p>
+                <h3 id="region-title" aria-live="polite">간토</h3>
+                <p id="region-description">도쿄의 불빛부터 하코네의 온천까지</p>
+              </div>
+            </div>
+            <div class="region-content">
+              <div class="tabs" role="tablist" aria-label="여행 정보 종류" id="category-tabs"></div>
+              <div class="spot-list" id="spot-list" role="tabpanel" tabindex="0"></div>
+            </div>
+          </section>
+        </div>
+        <div class="source-links">
+          <a href="https://www.japan.travel/en/destinations/" target="_blank" rel="noopener noreferrer">여행 정보 · 일본정부관광국</a>
+          <details><summary>사진 및 지도 출처</summary><ul id="photo-credits"></ul></details>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer layout"><span>일본의 결 <span class="footer-divider">/</span> JAPAN ATLAS</span><a href="#opening">첫 화면으로</a></footer>
+</body>
+</html>
