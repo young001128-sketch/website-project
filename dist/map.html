@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="지도에서 일본의 아홉 여행 권역을 골라 명소, 체험, 축제와 먹거리를 둘러보세요.">
+  <meta name="theme-color" content="#f7f4ec">
+  <title>일본 여행 지도 · 일본의 결</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Ccircle cx='18' cy='18' r='18' fill='%23182523'/%3E%3Cpath d='m7 23 7-8 5 6 4-4 6 6M8 26h20M22.5 10.5h.01' fill='none' stroke='%23f3a188' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="assets/regions.js" defer></script>
+  <script src="travel.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="header map-header layout">
+    <a class="wordmark" href="index.html" aria-label="일본의 결 첫 화면">
+      <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17.3"/><path d="m7 23 7-8 5 6 4-4 6 6M8 26h20M22.5 10.5h.01"/></svg></span>
+      <span><strong>일본의 결</strong><small>JAPAN ATLAS</small></span>
+    </a>
+  </header>
+
+  <main class="explorer layout" aria-labelledby="explore-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow section-kicker">EXPLORE THE MAP</p>
+        <h1 id="explore-title">어디로 떠날까요?</h1>
+      </div>
+      <p>지도에서 지역을 고르면<br class="desktop-break"> 그곳에서 보고, 즐기고, 맛볼 거리가 펼쳐져요.</p>
+    </div>
+
+    <div class="explore-grid">
+      <div class="map-card">
+        <div class="map-caption"><span class="map-symbol" aria-hidden="true">◈</span> 일본 여행 지도</div>
+        <svg class="japan-map" id="japan-map" viewBox="0 0 720 550" role="group" aria-label="일본의 아홉 여행 권역">
+          <defs><pattern id="map-grid" width="36" height="36" patternUnits="userSpaceOnUse"><path d="M 36 0 L 0 0 0 36" fill="none" stroke="#abc0b4" stroke-opacity=".38" stroke-width="1"/></pattern></defs>
+          <rect width="720" height="550" fill="url(#map-grid)" aria-hidden="true"/>
+          <g class="compass" aria-hidden="true" transform="translate(663 72)"><text y="-24">N</text><path d="M0-15 5 3 0 0-5 3Z"/><circle cy="2" r="20" fill="none"/><path d="M0 18V10M-13 2h5m16 0h5" fill="none"/></g>
+          <g id="map-terrain"></g>
+          <g id="map-labels"></g>
+        </svg>
+        <div class="region-picker" id="region-picker" role="group" aria-label="지역 목록"></div>
+      </div>
+
+      <section class="region-panel" aria-labelledby="region-title">
+        <div class="region-overview" id="region-overview">
+          <div class="region-picture" id="region-picture" aria-hidden="true"></div>
+          <div class="region-intro">
+            <p class="eyebrow" id="region-romaji">KANTO</p>
+            <h2 id="region-title" aria-live="polite">간토</h2>
+            <p id="region-description">도쿄의 불빛부터 하코네의 온천까지</p>
+          </div>
+        </div>
+        <div class="region-content">
+          <div class="tabs" role="tablist" aria-label="여행 정보 종류" id="category-tabs"></div>
+          <div class="spot-list" id="spot-list" role="tabpanel" tabindex="0"></div>
+        </div>
+      </section>
+    </div>
+    <div class="source-links">
+      <a href="https://www.japan.travel/en/destinations/" target="_blank" rel="noopener noreferrer">여행 정보 · 일본정부관광국</a>
+      <details><summary>사진 및 지도 출처</summary><ul id="photo-credits"></ul></details>
+    </div>
+  </main>
+  <footer class="footer layout"><span>일본의 결 <span class="footer-divider">/</span> JAPAN ATLAS</span><a href="index.html">첫 화면으로</a></footer>
+</body>
+</html>

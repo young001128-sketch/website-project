@@ -11,9 +11,6 @@ const selectors = {
   okinawa: { pin: [168, 183], label: [49, 158], elbow: [117, 153] },
 };
 
-const sceneButtons = [...document.querySelectorAll("[data-choice]")];
-const sceneLayers = [...document.querySelectorAll("[data-image]")];
-const sceneCopy = document.getElementById("hero-copy");
 const regionPicker = document.getElementById("region-picker");
 const regionPanel = document.querySelector(".region-panel");
 const regionPicture = document.getElementById("region-picture");
@@ -23,31 +20,9 @@ const tabs = document.getElementById("category-tabs");
 const spotList = document.getElementById("spot-list");
 const regionControls = {};
 const categoryControls = {};
-let activeScene = "mountain";
-let activeRegion = "kanto";
+const requestedRegion = new URLSearchParams(window.location.search).get("region");
+let activeRegion = Object.hasOwn(regions, requestedRegion) ? requestedRegion : "kanto";
 let activeCategory = "sight";
-
-function changeScene(key) {
-  if (key === activeScene) return;
-  activeScene = key;
-  const chapter = chapters[key];
-  document.getElementById("opening").dataset.scene = key;
-  document.getElementById("hero-kicker").textContent = chapter.area;
-  document.getElementById("scene-location").textContent = chapter.location;
-  const period = document.createElement("span");
-  period.textContent = ".";
-  document.getElementById("hero-title").replaceChildren(chapter.title[0], document.createElement("br"), chapter.title[1], period);
-  document.getElementById("hero-description").replaceChildren(chapter.description[0], document.createElement("br"), chapter.description[1]);
-  for (const button of sceneButtons) button.setAttribute("aria-pressed", String(button.dataset.choice === key));
-  for (const layer of sceneLayers) layer.classList.toggle("is-active", layer.dataset.image === key);
-  replayAnimation(sceneCopy);
-}
-
-function replayAnimation(element) {
-  element.classList.remove("is-changing");
-  element.getBoundingClientRect();
-  element.classList.add("is-changing");
-}
 
 function svgElement(tag, attributes) {
   const element = document.createElementNS(svgNamespace, tag);
@@ -68,7 +43,9 @@ function selectRegion(key, scrollToDetails = false) {
   document.getElementById("region-title").textContent = region.name;
   document.getElementById("region-description").textContent = region.tagline;
   regionPicture.style.backgroundImage = `url("assets/${region.photo}.jpg")`;
-  replayAnimation(regionPicture);
+  regionPicture.classList.remove("is-changing");
+  regionPicture.getBoundingClientRect();
+  regionPicture.classList.add("is-changing");
   renderSpots();
   if (scrollToDetails && window.matchMedia("(max-width: 700px)").matches) {
     const rect = regionPanel.getBoundingClientRect();
@@ -84,7 +61,7 @@ function renderSpots() {
     const article = document.createElement("article");
     article.className = "spot";
     const text = document.createElement("div");
-    const title = document.createElement("h4");
+    const title = document.createElement("h3");
     title.textContent = name;
     const detail = document.createElement("p");
     detail.textContent = description;
@@ -176,13 +153,6 @@ function createTabs() {
   }
 }
 
-for (const button of sceneButtons) button.addEventListener("click", () => changeScene(button.dataset.choice));
-document.querySelector(".primary-link").addEventListener("click", () => selectRegion(chapters[activeScene].region));
-for (const link of document.querySelectorAll('a[href="#explore"]')) {
-  link.addEventListener("click", () => {
-    document.getElementById("explore-title").focus({ preventScroll: true });
-  });
-}
 const credits = document.getElementById("photo-credits");
 for (const [attribution, url, license] of photoCredits) {
   const item = document.createElement("li");

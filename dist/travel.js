@@ -1,21 +1,3 @@
-const chapters = {
-  mountain: {
-    area: "가와구치호 · 야마나시", title: ["일본의 풍경을", "따라가다"],
-    description: ["후지산 아래 고요한 호수에서 시작해", "마음이 이끄는 곳으로 떠나보세요."],
-    location: "LAKE KAWAGUCHI, JAPAN", region: "chubu",
-  },
-  city: {
-    area: "시부야 · 도쿄", title: ["불빛을 따라", "도시 속으로"],
-    description: ["해가 지면 또 다른 도쿄가 열려요.", "골목의 불빛을 따라 나만의 여행을 시작해 보세요."],
-    location: "SHIBUYA, TOKYO", region: "kanto",
-  },
-  coast: {
-    area: "오키나와 · 일본 남부", title: ["파도가 닿는", "섬으로"],
-    description: ["바다색이 짙어지는 남쪽 섬에서", "한 박자 느린 여행을 시작해 보세요."],
-    location: "OKINAWA, JAPAN", region: "okinawa",
-  },
-};
-
 const categories = { sight: "명소", activity: "체험", festival: "축제", food: "먹거리" };
 
 const regions = {
