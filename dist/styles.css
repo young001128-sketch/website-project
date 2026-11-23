@@ -112,14 +112,22 @@ h1, h2, h3, p { margin: 0; }
 .map-card, .region-panel { border: 1px solid var(--line); }
 .map-card { position: relative; overflow: hidden; background: #e3ece3; animation: map-in .65s cubic-bezier(.21,.65,.23,1) both; }
 @keyframes map-in { from { opacity: .2; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.map-caption { position: absolute; left: 22px; top: 17px; z-index: 1; display: flex; align-items: center; gap: 8px; color: #385449; font-weight: 800; font-size: .9rem; pointer-events: none; }
+.map-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 53px; padding: 7px 15px; border-bottom: 1px solid #c6d5c8; }
+.map-caption { display: flex; align-items: center; gap: 8px; color: #385449; font-weight: 800; font-size: .9rem; }
 .map-symbol { color: var(--dark-accent); }
+.map-back { padding: 5px 10px; border: 1px solid #8ca597; border-radius: 2px; background: #f5f7ef; color: #294b40; font-size: .875rem; font-weight: 750; }
+.map-back:hover { background: #d3e2d6; }
 .japan-map { width: 100%; height: auto; }
+.map-layer-hidden { display: none; }
+#prefecture-land { transform-origin: 0 0; }
 .compass { stroke: #6c8677; fill: #6c8677; stroke-width: 1; }
 .compass text { text-anchor: middle; stroke: none; font-size: 12px; font-weight: 800; }
 .map-region { fill: #88a899; stroke: #e7eee4; stroke-width: .8; cursor: pointer; transition: fill .23s; }
 .map-region[data-region="tohoku"], .map-region[data-region="kansai"], .map-region[data-region="kyushu"] { fill: #99b3a0; }
 .map-region[data-region="chubu"], .map-region[data-region="shikoku"] { fill: #729485; }
+.prefecture-shape { stroke: #eef5eb; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
+.prefecture-shape:nth-child(3n + 1) { fill: #a1b9a7; }
+.prefecture-shape:nth-child(3n + 2) { fill: #739687; }
 .map-region:hover, .map-region.is-hovered { fill: #55796c; }
 .map-region[aria-pressed="true"] { fill: #b85339; }
 .map-region:focus { outline: none; }
@@ -131,6 +139,7 @@ h1, h2, h3, p { margin: 0; }
 .map-label text { fill: #294b40; font-size: 16px; font-weight: 800; paint-order: stroke; stroke: #e5ede4; stroke-width: 5px; stroke-linecap: round; stroke-linejoin: round; }
 .map-label.is-active text, .map-label:hover text { fill: #9d3829; }
 .map-label.is-active polyline, .map-label.is-active circle { stroke: #ad402d; }
+.prefecture-label text { font-size: 19px; }
 .island-inset { fill: #e3ece3; stroke: #91a598; stroke-dasharray: 3 4; rx: 3; }
 .region-picker { display: flex; flex-wrap: wrap; gap: 7px; padding: 13px 14px; border-top: 1px solid #c6d5c8; background: #eef3ea; }
 .region-chip { border: 1px solid #aabdae; background: transparent; color: #2b493e; border-radius: 2px; padding: 5px 10px; font-size: .875rem; font-weight: 700; }
@@ -139,6 +148,7 @@ h1, h2, h3, p { margin: 0; }
 .region-chip:focus-visible { outline-color: var(--dark-accent); outline-offset: 2px; }
 .region-panel { background: #fcfaf4; }
 .region-overview { background: #eef1e8; border-bottom: 1px solid var(--line); }
+.guide-back { display: none; }
 .region-intro { padding: 17px 22px 16px; }
 .region-intro .eyebrow { color: var(--dark-accent); }
 .region-intro h2 { margin: 3px 0 4px; font: 700 clamp(1.8rem, 3.4vw, 2.8rem)/1.13 var(--title-font); letter-spacing: -.055em; }
@@ -148,14 +158,12 @@ h1, h2, h3, p { margin: 0; }
 .tab { border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 13px 3px 11px; background: transparent; color: var(--muted); font-size: .875rem; white-space: nowrap; }
 .tab:hover { color: var(--ink); }
 .tab[aria-selected="true"] { border-color: var(--dark-accent); color: var(--dark-accent); font-weight: 800; }
-.tab-panel { padding-top: 13px; }
-.tab-picture { margin: 0; }
-.tab-picture img { display: block; width: 100%; height: auto; aspect-ratio: 2.35; max-height: 216px; object-fit: cover; background: #e3ece3; }
-.tab-picture figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; padding: 6px 0 9px; color: var(--muted); font-size: .8rem; }
-.tab-picture figcaption > span:first-child { font-weight: 700; }
-.photo-attribution { display: flex; gap: 3px 8px; flex-wrap: wrap; }
-.photo-attribution a { text-decoration: underline; text-underline-offset: 2px; }
-.spot { padding: 13px 0; }
+.spot-picture { margin: 0 0 9px; }
+.spot-picture img { display: block; width: 100%; height: auto; aspect-ratio: 1.95; max-height: 248px; object-fit: cover; background: #e3ece3; }
+.spot-picture figcaption { display: flex; flex-wrap: wrap; gap: 2px 9px; padding-top: 4px; color: var(--muted); font-size: .8rem; }
+.spot-picture figcaption span { font-weight: 700; }
+.spot-picture figcaption a { text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
+.spot { padding: 15px 0; }
 .spot + .spot { border-top: 1px solid var(--line); }
 .spot h3 { margin: 0 0 3px; font-size: 1rem; line-height: 1.4; }
 .spot p { color: var(--muted); font-size: .9rem; line-height: 1.5; }
@@ -170,6 +178,9 @@ h1, h2, h3, p { margin: 0; }
 .footer { display: flex; justify-content: space-between; align-items: center; padding-block: 20px 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: .875rem; }
 .footer-divider { margin-inline: 5px; color: var(--dark-accent); }
 
+@media (min-width: 701px) and (min-height: 700px) {
+  .map-card { position: sticky; top: 12px; }
+}
 @media (max-width: 960px) {
   .layout { width: calc(100% - 64px); }
   .explore-grid { grid-template-columns: minmax(0, 1.17fr) minmax(0, 1fr); gap: 14px; }
@@ -198,10 +209,12 @@ h1, h2, h3, p { margin: 0; }
   .section-heading > p { margin-top: 11px; max-width: none; }
   .desktop-break { display: none; }
   .explore-grid { grid-template-columns: minmax(0, 1fr); }
-  .map-caption { top: 8px; left: 10px; }
+  .map-toolbar { padding-inline: 10px; }
   .region-picker { padding: 10px; gap: 5px; }
   .region-chip { padding: 4px 8px; }
+  .region-overview { display: flex; justify-content: space-between; align-items: start; }
   .region-intro { padding: 17px; }
+  .guide-back:not([hidden]) { display: inline-block; flex: none; margin: 12px 10px 0 0; }
   .source-links { gap: 6px 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
