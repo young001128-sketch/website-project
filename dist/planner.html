@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="일본 여행의 방문 순서와 숙박일을 입력해 예상 경비를 계산하고, 지역별로 들를 만한 곳을 찾아보세요.">
+  <meta name="theme-color" content="#f7f4ec">
+  <title>여행 일정 짜기 · 일본 여행 가이드</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="planner.css">
+  <script src="travel.js" defer></script>
+  <script src="prefectures-east.js" defer></script>
+  <script src="prefectures-west.js" defer></script>
+  <script src="prefecture-regions.js" defer></script>
+  <script src="itinerary.js" defer></script>
+  <script src="planner.js" defer></script>
+</head>
+<body>
+  <header class="header map-header layout">
+    <a class="wordmark" href="index.html" aria-label="일본 여행 가이드 첫 화면">
+      <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17.3"/><path d="m7 23 7-8 5 6 4-4 6 6M8 26h20M22.5 10.5h.01"/></svg></span>
+      <strong>일본 여행 가이드</strong>
+    </a>
+    <a class="planner-nav-link" href="map.html">여행 지도 보기</a>
+  </header>
+
+  <main class="planner layout" aria-labelledby="planner-title">
+    <div class="planner-intro">
+      <h1 id="planner-title">여행 일정 짜기</h1>
+      <p>방문할 지역을 순서대로 추가하고, 예상 경비와 들를 만한 곳을 확인하세요.</p>
+    </div>
+
+    <div class="planner-grid">
+      <form id="planner-form" class="planner-form">
+        <section class="planner-block" aria-labelledby="route-title">
+          <div class="planner-block-heading">
+            <h2 id="route-title">여행 동선</h2>
+            <button class="planner-button planner-button-secondary" id="add-stop" type="button">방문지 추가</button>
+          </div>
+          <p class="planner-help" id="route-help">당일 방문은 0박으로 입력하세요. 이전 방문지에서 이동하는 1인 비용은 직접 입력하거나 구간 추정값을 쓸 수 있어요.</p>
+          <ol class="planner-stops" id="route-stops" aria-describedby="route-help"></ol>
+        </section>
+
+        <section class="planner-block" aria-labelledby="settings-title">
+          <div class="planner-block-heading"><h2 id="settings-title">여행 조건</h2></div>
+          <div class="planner-fields">
+            <label>여행 인원
+              <input type="number" name="people" min="1" step="1" value="2" required>
+            </label>
+            <label>객실 수
+              <input type="number" name="rooms" min="1" step="1" value="1" required>
+            </label>
+          </div>
+          <fieldset class="planner-interests">
+            <legend>관심사</legend>
+            <div id="planner-interests"></div>
+          </fieldset>
+          <details class="planner-rates">
+            <summary>경비 기준 확인·변경</summary>
+            <p class="planner-help">예약한 요금이나 평소 지출에 맞춰 기본값을 바꿀 수 있어요.</p>
+            <div class="planner-fields">
+              <label>숙박 · 객실 1개/1박 (엔)
+                <input type="number" name="lodgingPerRoomNight" min="0" step="1" required>
+              </label>
+              <label>식비 · 1인/1일 (엔)
+                <input type="number" name="mealsPerPersonDay" min="0" step="1" required>
+              </label>
+              <label>시내 교통 · 1인/1일 (엔)
+                <input type="number" name="localTransitPerPersonDay" min="0" step="1" required>
+              </label>
+              <label>관광·체험 · 1인/1일 (엔)
+                <input type="number" name="activitiesPerPersonDay" min="0" step="1" required>
+              </label>
+            </div>
+          </details>
+          <p id="planner-status" class="planner-status" role="status"></p>
+          <button class="planner-button planner-button-primary" type="submit">경비 계산하고 추천 보기</button>
+        </section>
+      </form>
+
+      <section class="planner-budget" id="planner-budget" tabindex="-1" aria-labelledby="budget-title">
+        <h2 id="budget-title">예상 경비</h2>
+        <p class="planner-budget-lead" id="budget-empty">일정을 입력하면 전체 여행의 경비가 여기에 표시됩니다.</p>
+        <div id="budget-values" hidden>
+          <p class="planner-budget-lead" id="budget-duration"></p>
+          <p class="planner-total" id="budget-total"></p>
+          <p id="budget-per-person"></p>
+          <dl class="planner-breakdown" id="budget-breakdown"></dl>
+        </div>
+        <p class="planner-budget-note">엔화(JPY) 기준의 계획용 추정치입니다. 국제선·쇼핑 예산은 별도로 잡으세요.</p>
+        <a class="planner-budget-source" href="https://www.japan.travel/en/guide/japan-on-a-budget/" target="_blank" rel="noopener noreferrer">일본정부관광국 경비 가이드</a>
+      </section>
+    </div>
+
+    <section id="planner-recommendations" class="planner-recommendations" aria-labelledby="recommendations-title" hidden>
+      <h2 id="recommendations-title">동선별로 들를 만한 곳</h2>
+      <div id="recommendations-list"></div>
+    </section>
+  </main>
+
+  <footer class="footer layout"><span>일본 여행 가이드</span><a href="map.html">여행 지도 보기</a></footer>
+
+  <template id="stop-template">
+    <li class="planner-stop">
+      <div class="planner-stop-header">
+        <strong data-stop-title></strong>
+        <div class="planner-stop-actions">
+          <button type="button" data-action="up">위로</button>
+          <button type="button" data-action="down">아래로</button>
+          <button type="button" data-action="remove">삭제</button>
+        </div>
+      </div>
+      <div class="planner-stop-fields">
+        <label>지역
+          <select data-field="prefecture" required>
+            <option value="">방문 지역 선택</option>
+          </select>
+        </label>
+        <label>숙박 (박)
+          <input data-field="nights" type="number" min="0" step="1" value="1" required>
+        </label>
+        <label><span data-fare-label></span>
+          <input data-field="fare" type="number" min="0" step="1">
+        </label>
+      </div>
+    </li>
+  </template>
+</body>
+</html>

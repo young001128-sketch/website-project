@@ -11,6 +11,21 @@ Content-Type: application/json
   "people": 2
 }
 
+### 동선별 예상 경비와 추천 장소
+POST {{baseUrl}}/api/trips/estimate
+Content-Type: application/json
+
+{
+  "people": 2,
+  "rooms": 1,
+  "stops": [
+    { "prefectureId": 27, "nights": 2 },
+    { "prefectureId": 26, "nights": 1, "transportPerPerson": 1200 },
+    { "prefectureId": 29, "nights": 0 }
+  ],
+  "interests": ["sight", "food"]
+}
+
 ### 여행 생성
 # 개별 조회, 수정, 삭제를 테스트하려면 이 요청을 먼저 실행하세요.
 # @name createTrip

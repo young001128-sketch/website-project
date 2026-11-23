@@ -162,3 +162,5 @@ const eastGuides = {
     food: ["히쓰마부시", "잘게 썬 장어 덮밥을 그대로 맛보고 양념이나 육수를 더해 즐겨요.", "나고야 · 아쓰타 일대", "名古屋市 熱田 ひつまぶし", "ひつまぶし"],
   },
 };
+
+if (typeof module !== "undefined") module.exports = eastGuides;

@@ -169,3 +169,5 @@ const westGuides = {
     food: ["오키나와 소바", "밀로 만든 면을 맑은 국물에 말고 돼지고기와 파를 얹어요.", "나하시 · 마키시 공설시장 일대", "牧志公設市場 沖縄そば 那覇市", "沖縄そば"],
   },
 };
+
+if (typeof module !== "undefined") module.exports = westGuides;

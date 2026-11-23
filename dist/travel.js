@@ -66,6 +66,8 @@ const regions = {
   },
 };
 
+if (typeof module !== "undefined") module.exports = { categories, regions };
+
 const photoCredits = [
   ["가와구치호 · Steven Lynn", "https://unsplash.com/photos/WJAl9CtgdyA"],
   ["시부야 · Ong Cheng Zheng", "https://unsplash.com/photos/islAPYxY-rE"],

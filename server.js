@@ -1,5 +1,7 @@
 const express = require("express");
+const { join } = require("node:path");
 const db = require("./database");
+const itinerary = require("./dist/itinerary");
 
 const app = express();
 const missingTrip = { error: "여행을 찾을 수 없습니다." };
@@ -59,6 +61,14 @@ app.post("/api/trips/budget", (req, res) => {
   res.json({ total, perPerson: total / people });
 });
 
+app.post("/api/trips/estimate", (req, res) => {
+  const plan = itinerary.estimate(req.body);
+  if (plan.error) {
+    return res.status(400).json(plan);
+  }
+  res.json(plan);
+});
+
 app.post("/api/trips", (req, res) => {
   const values = tripValues(req.body ?? {});
   if (!values) {
@@ -111,6 +121,8 @@ app.delete("/api/trips/:id", (req, res) => {
   }
   res.json({ message: "여행 삭제 완료" });
 });
+
+app.use(express.static(join(__dirname, "dist")));
 
 app.use((error, req, res, next) => {
   if (res.headersSent) {
