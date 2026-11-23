@@ -26,6 +26,11 @@ const prefectureLabels = document.getElementById("prefecture-labels");
 const tabs = document.getElementById("category-tabs");
 const tabPanel = document.getElementById("tab-panel");
 const spotList = document.getElementById("spot-list");
+const photoDialog = document.getElementById("photo-dialog");
+const photoDialogTitle = document.getElementById("photo-dialog-title");
+const photoDialogImage = document.getElementById("photo-dialog-image");
+const photoDialogNote = document.getElementById("photo-dialog-note");
+const photoDialogCredits = document.getElementById("photo-dialog-credits");
 const prefectures = { ...eastGuides, ...westGuides };
 const regionControls = {};
 const categoryControls = {};
@@ -114,7 +119,7 @@ function renderTab() {
   spotList.replaceChildren(...entries.map(([name, description, place, query]) => {
     const article = document.createElement("article");
     article.className = "spot";
-    if (Object.hasOwn(cardPhotos, name)) article.append(createPhoto(name, cardPhotos[name]));
+    if (Object.hasOwn(cardPhotos, name)) article.append(createPhoto(name, description, cardPhotos[name]));
     const title = document.createElement("h3");
     title.textContent = name;
     const detail = document.createElement("p");
@@ -142,9 +147,15 @@ function renderTab() {
   }));
 }
 
-function createPhoto(name, { src, caption, author, source, license, licenseUrl }) {
+function createPhoto(name, description, photo) {
+  const { src, caption } = photo;
   const figure = document.createElement("figure");
   figure.className = "spot-picture";
+  const view = document.createElement("button");
+  view.type = "button";
+  view.className = "spot-photo-view";
+  view.setAttribute("aria-label", `${caption} 사진 정보`);
+  view.setAttribute("aria-haspopup", "dialog");
   const image = document.createElement("img");
   image.alt = caption;
   image.width = 960;
@@ -152,26 +163,43 @@ function createPhoto(name, { src, caption, author, source, license, licenseUrl }
   image.loading = "lazy";
   image.decoding = "async";
   image.src = src;
+  const label = document.createElement("span");
+  label.textContent = "사진 정보";
+  view.append(image, label);
+  view.addEventListener("click", () => openPhoto(photo, description));
+
   const credits = document.createElement("figcaption");
   if (caption !== name) {
     const subject = document.createElement("span");
     subject.textContent = caption;
     credits.append(subject);
   }
+  credits.append(...photoCreditLinks(photo));
+  figure.append(view, credits);
+  return figure;
+}
+
+function photoCreditLinks({ author, source, license, licenseUrl }) {
   const photo = document.createElement("a");
   photo.textContent = author;
   photo.href = source;
   photo.target = "_blank";
   photo.rel = "noopener noreferrer";
-  credits.append(photo);
-  if (licenseUrl) {
-    const licenseLink = photo.cloneNode();
-    licenseLink.textContent = license;
-    licenseLink.href = licenseUrl;
-    credits.append(licenseLink);
-  }
-  figure.append(image, credits);
-  return figure;
+  if (!licenseUrl) return [photo];
+  const licenseLink = photo.cloneNode();
+  licenseLink.textContent = license;
+  licenseLink.href = licenseUrl;
+  return [photo, licenseLink];
+}
+
+function openPhoto(photo, description) {
+  photoDialogTitle.textContent = photo.caption;
+  photoDialogImage.alt = photo.caption;
+  photoDialogImage.src = photo.src;
+  photoDialogNote.textContent = photoNotes[photo.caption] ?? description;
+  photoDialogCredits.replaceChildren(...photoCreditLinks(photo));
+  photoDialog.showModal();
+  photoDialog.scrollTop = 0;
 }
 
 function selectCategory(key) {
@@ -360,6 +388,10 @@ for (const [attribution, url, license] of photoCredits) {
 }
 drawMap();
 createTabs();
+document.getElementById("photo-dialog-close").addEventListener("click", () => photoDialog.close());
+photoDialog.addEventListener("click", event => {
+  if (event.target === photoDialog) photoDialog.close();
+});
 mapBack.addEventListener("click", showNation);
 guideBack.addEventListener("click", () => {
   showNation();

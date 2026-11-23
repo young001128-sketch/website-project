@@ -80,5 +80,20 @@
     </div>
   </main>
   <footer class="footer layout"><span>일본 여행 가이드</span><a href="index.html">첫 화면으로</a></footer>
+  <dialog class="photo-dialog" id="photo-dialog" aria-labelledby="photo-dialog-title" aria-describedby="photo-dialog-note">
+    <div class="photo-dialog-content">
+      <header class="photo-dialog-header">
+        <h2 id="photo-dialog-title"></h2>
+        <button class="photo-dialog-close" id="photo-dialog-close" type="button" autofocus>닫기</button>
+      </header>
+      <figure>
+        <img id="photo-dialog-image" alt="">
+        <figcaption>
+          <p id="photo-dialog-note"></p>
+          <div class="photo-dialog-credits" id="photo-dialog-credits"></div>
+        </figcaption>
+      </figure>
+    </div>
+  </dialog>
 </body>
 </html>

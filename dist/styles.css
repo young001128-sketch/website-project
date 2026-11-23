@@ -154,6 +154,9 @@ h1, h2, h3, p { margin: 0; }
 .tab:hover { color: var(--ink); }
 .tab[aria-selected="true"] { border-color: var(--dark-accent); color: var(--dark-accent); font-weight: 800; }
 .spot-picture { margin: 0 0 9px; }
+.spot-photo-view { display: block; position: relative; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
+.spot-photo-view span { position: absolute; inset: auto 9px 9px auto; padding: 4px 10px; border-radius: 2px; background: #1c302aee; color: #fcfaf4; font-size: .875rem; font-weight: 700; }
+.spot-photo-view:hover span { background: #0e211b; }
 .spot-picture img { display: block; width: 100%; height: auto; aspect-ratio: 1.95; max-height: 248px; object-fit: cover; background: #e3ece3; }
 .spot-picture figcaption { display: flex; flex-wrap: wrap; gap: 2px 9px; padding-top: 4px; color: var(--muted); font-size: .8rem; }
 .spot-picture figcaption span { font-weight: 700; }
@@ -171,6 +174,19 @@ h1, h2, h3, p { margin: 0; }
 .source-links summary { cursor: pointer; }
 .source-links ul { margin: 6px 0 0; padding-left: 20px; }
 .footer { display: flex; justify-content: space-between; align-items: center; padding-block: 20px 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: .875rem; }
+
+html:has(.photo-dialog[open]) { overflow: hidden; scrollbar-gutter: stable; }
+.photo-dialog { width: min(58rem, calc(100% - 24px)); max-width: none; max-height: calc(100dvh - 24px); padding: 0; border: 1px solid var(--line); border-radius: 3px; background: #fcfaf4; color: var(--ink); overscroll-behavior: contain; }
+.photo-dialog::backdrop { background: #101b15c9; }
+.photo-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 16px; }
+.photo-dialog-header h2 { font-size: clamp(1rem, 2.4vw, 1.25rem); line-height: 1.35; }
+.photo-dialog-close { flex: none; padding: 5px 11px; border: 1px solid #8ca597; border-radius: 2px; background: #eef1e8; font-size: .875rem; font-weight: 750; }
+.photo-dialog-close:hover { background: #d3e2d6; }
+.photo-dialog figure { margin: 0; }
+.photo-dialog img { display: block; width: 100%; height: auto; max-height: min(68dvh, 42rem); object-fit: contain; background: #101b15; }
+.photo-dialog figcaption { padding: 12px 16px 15px; }
+.photo-dialog-credits { display: flex; flex-wrap: wrap; gap: 2px 9px; margin-top: 3px; color: var(--muted); font-size: .8rem; }
+.photo-dialog-credits a { text-decoration: underline; text-underline-offset: 2px; overflow-wrap: anywhere; }
 
 @media (min-width: 701px) and (min-height: 700px) {
   .map-card { position: sticky; top: 12px; }
