@@ -13,10 +13,14 @@ const selectors = {
 
 const regionPicker = document.getElementById("region-picker");
 const regionPanel = document.querySelector(".region-panel");
-const regionPicture = document.getElementById("region-picture");
 const mapTerrain = document.getElementById("map-terrain");
 const mapLabels = document.getElementById("map-labels");
 const tabs = document.getElementById("category-tabs");
+const tabPanel = document.getElementById("tab-panel");
+const tabImage = document.getElementById("tab-photo");
+const tabCaption = document.getElementById("tab-photo-caption");
+const tabSource = document.getElementById("tab-photo-source");
+const tabLicense = document.getElementById("tab-photo-license");
 const spotList = document.getElementById("spot-list");
 const regionControls = {};
 const categoryControls = {};
@@ -42,11 +46,7 @@ function selectRegion(key, scrollToDetails = false) {
   document.getElementById("region-romaji").textContent = region.en;
   document.getElementById("region-title").textContent = region.name;
   document.getElementById("region-description").textContent = region.tagline;
-  regionPicture.style.backgroundImage = `url("assets/${region.photo}.jpg")`;
-  regionPicture.classList.remove("is-changing");
-  regionPicture.getBoundingClientRect();
-  regionPicture.classList.add("is-changing");
-  renderSpots();
+  renderTab();
   if (scrollToDetails && window.matchMedia("(max-width: 700px)").matches) {
     const rect = regionPanel.getBoundingClientRect();
     if (rect.top + 200 > window.innerHeight) {
@@ -55,23 +55,50 @@ function selectRegion(key, scrollToDetails = false) {
   }
 }
 
-function renderSpots() {
-  spotList.setAttribute("aria-labelledby", categoryControls[activeCategory].id);
-  spotList.replaceChildren(...regions[activeRegion][activeCategory].map(([name, description, place]) => {
+function renderTab() {
+  setTabPhoto(tabPhotos[`${activeRegion}-${activeCategory}`]);
+  tabPanel.setAttribute("aria-labelledby", categoryControls[activeCategory].id);
+  spotList.replaceChildren(...regions[activeRegion][activeCategory].map(([name, description, place, query]) => {
     const article = document.createElement("article");
     article.className = "spot";
-    const text = document.createElement("div");
     const title = document.createElement("h3");
     title.textContent = name;
     const detail = document.createElement("p");
     detail.textContent = description;
-    text.append(title, detail);
-    const location = document.createElement("span");
-    location.className = "spot-place";
-    location.textContent = place;
-    article.append(text, location);
+    const location = document.createElement("a");
+    location.className = "spot-map-link";
+    location.href = `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query })}`;
+    location.target = "_blank";
+    location.rel = "noopener noreferrer";
+    const action = activeCategory === "food" ? "맛집 찾기" : "지도 보기";
+    location.setAttribute("aria-label", `${name} · ${place} · Google 지도에서 ${action} (새 탭)`);
+    const pin = svgElement("svg", { viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" });
+    pin.append(
+      svgElement("path", { d: "M19 10c0 5-7 10-7 10S5 15 5 10a7 7 0 1 1 14 0Z" }),
+      svgElement("circle", { cx: 12, cy: 10, r: 2.25 }),
+    );
+    const locationText = document.createElement("span");
+    locationText.textContent = place;
+    const actionText = document.createElement("span");
+    actionText.className = "spot-link-action";
+    actionText.textContent = action;
+    location.append(pin, locationText, actionText);
+    article.append(title, detail, location);
     return article;
   }));
+}
+
+function setTabPhoto({ src, caption, author, source, license, licenseUrl }) {
+  tabImage.alt = caption;
+  tabImage.src = src;
+  tabCaption.textContent = caption;
+  tabSource.textContent = author;
+  tabSource.href = source;
+  tabLicense.hidden = !licenseUrl;
+  if (licenseUrl) {
+    tabLicense.textContent = license;
+    tabLicense.href = licenseUrl;
+  }
 }
 
 function selectCategory(key) {
@@ -81,7 +108,7 @@ function selectCategory(key) {
     button.setAttribute("aria-selected", String(selected));
     button.tabIndex = selected ? 0 : -1;
   }
-  renderSpots();
+  renderTab();
 }
 
 function drawMap() {
@@ -132,7 +159,9 @@ function createTabs() {
     button.className = "tab";
     button.id = `tab-${key}`;
     button.setAttribute("role", "tab");
-    button.setAttribute("aria-controls", "spot-list");
+    button.setAttribute("aria-controls", "tab-panel");
+    button.setAttribute("aria-selected", String(key === activeCategory));
+    button.tabIndex = key === activeCategory ? 0 : -1;
     button.textContent = label;
     button.addEventListener("click", () => selectCategory(key));
     button.addEventListener("keydown", event => {
@@ -165,12 +194,11 @@ for (const [attribution, url, license] of photoCredits) {
   if (license) {
     const licenseLink = link.cloneNode(false);
     licenseLink.href = license;
-    licenseLink.textContent = "CC BY-SA 2.0 · 화면 비율에 맞게 표시";
+    licenseLink.textContent = "CC BY-SA 2.0";
     item.append(" · ", licenseLink);
   }
   credits.append(item);
 }
 drawMap();
 createTabs();
-selectCategory(activeCategory);
 selectRegion(activeRegion);

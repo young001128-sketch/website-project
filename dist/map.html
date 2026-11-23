@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="assets/regions.js" defer></script>
   <script src="travel.js" defer></script>
+  <script src="tab-photos.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -43,8 +44,7 @@
       </div>
 
       <section class="region-panel" aria-labelledby="region-title">
-        <div class="region-overview" id="region-overview">
-          <div class="region-picture" id="region-picture" aria-hidden="true"></div>
+        <div class="region-overview">
           <div class="region-intro">
             <p class="eyebrow" id="region-romaji">KANTO</p>
             <h2 id="region-title" aria-live="polite">간토</h2>
@@ -53,13 +53,29 @@
         </div>
         <div class="region-content">
           <div class="tabs" role="tablist" aria-label="여행 정보 종류" id="category-tabs"></div>
-          <div class="spot-list" id="spot-list" role="tabpanel" tabindex="0"></div>
+          <div class="tab-panel" id="tab-panel" role="tabpanel" tabindex="0">
+            <figure class="tab-picture">
+              <img id="tab-photo" alt="" width="960" height="540" loading="lazy" decoding="async">
+              <figcaption>
+                <span id="tab-photo-caption" aria-hidden="true"></span>
+                <span class="photo-attribution">
+                  <a id="tab-photo-source" target="_blank" rel="noopener noreferrer"></a>
+                  <a id="tab-photo-license" target="_blank" rel="noopener noreferrer"></a>
+                </span>
+              </figcaption>
+            </figure>
+            <div id="spot-list"></div>
+          </div>
         </div>
       </section>
     </div>
     <div class="source-links">
       <a href="https://www.japan.travel/en/destinations/" target="_blank" rel="noopener noreferrer">여행 정보 · 일본정부관광국</a>
-      <details><summary>사진 및 지도 출처</summary><ul id="photo-credits"></ul></details>
+      <details>
+        <summary>사진 및 지도 출처</summary>
+        <p>탭의 사진은 표시 크기와 비율에 맞게 조정했습니다. 각 사진 아래에서 원본과 이용 조건을 확인할 수 있어요.</p>
+        <ul id="photo-credits"></ul>
+      </details>
     </div>
   </main>
   <footer class="footer layout"><span>일본의 결 <span class="footer-divider">/</span> JAPAN ATLAS</span><a href="index.html">첫 화면으로</a></footer>
